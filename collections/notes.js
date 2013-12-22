@@ -14,7 +14,8 @@ Notes.deny({
 
 Meteor.methods({
   note: function(noteAttributes) {
-    var user = Meteor.user();
+    var user = Meteor.user(),
+      noteWithSameTitle = Notes.findOne({title: noteAttributes.title});
 
     // ensure user is logged in
     if (!user)
@@ -23,6 +24,11 @@ Meteor.methods({
     // ensure note has a title
     if (!noteAttributes.title)
       throw new Meteor.Error(422, 'Please fill in the title.');
+
+    // check note titles are unique
+    if (noteAttributes.title && noteWithSameTitle) {
+      throw new Meteor.Error(302, "This title is taken", noteWithSameTitle._id);
+    }
 
     // pick out whitelisted keys
     var note = _.extend(_.pick(noteAttributes, 'title', 'noteBody'), {

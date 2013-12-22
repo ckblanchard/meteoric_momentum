@@ -8,10 +8,14 @@ Template.noteSubmit.events({
     }
 
     Meteor.call('note', note, function(error, id){
-      if (error)
-        return alert(error.reason);
-
-      Router.go('notePage', {_id: id});
+      if (error) {
+        // display error to user
+        throwError(error.reason);
+        if (error.error === 302)
+          Router.go('notePage', {_id: error.details})
+      } else {
+        Router.go('notePage', {_id: id});
+      }
     });
   }
 });
