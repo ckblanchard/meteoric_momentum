@@ -1,8 +1,11 @@
 <template name="noteItem">
   <div class="note">
     <div class="note-content">
-      <h3><a href="{{pathFor 'notePage'}}">{{title}}</a></h3>
+      <h3>{{title}}</h3>
+      <p>Submitted by {{author}}
+        {{#if ownNote}}<a href="{{pathFor 'noteEdit'}}">Edit note</a>{{/if}}</p>
       <p>{{noteBody}}</p>
     </div>
+    <a href="{{pathFor 'notePage'}}" class="discuss btn">Discuss</a>
   </div>
 </template>

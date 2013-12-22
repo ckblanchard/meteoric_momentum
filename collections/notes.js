@@ -1,5 +1,17 @@
 Notes = new Meteor.Collection('notes');
 
+Notes.allow({
+  update: ownsDocument,
+  remove: ownsDocument
+});
+
+Notes.deny({
+  update: function(userId, note, fieldNames) {
+    // can only edit following fields
+    return (_.without(fieldNames, 'title', 'noteBody').length > 0);
+  }
+});
+
 Meteor.methods({
   note: function(noteAttributes) {
     var user = Meteor.user();
